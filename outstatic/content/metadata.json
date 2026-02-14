@@ -1,6 +1,6 @@
 {
-  "commit": "d010c2be649d505608998a82b9801a5f18293a73",
-  "generated": "2026-02-14T15:15:13.719Z",
+  "commit": "834bf2fb0975d36c679e56bc97dd7ed39bb08bff",
+  "generated": "2026-02-14T15:19:37.917Z",
   "metadata": [
     {
       "__outstatic": {
@@ -152,6 +152,24 @@
       "slug": "test-new-page",
       "status": "published",
       "title": "Test New Page"
+    },
+    {
+      "__outstatic": {
+        "commit": "834bf2fb0975d36c679e56bc97dd7ed39bb08bff",
+        "hash": "2580612831",
+        "path": "examples/basic-blog/outstatic/content/posts/sup-new-page.mdx"
+      },
+      "author": {
+        "name": "Dasteen",
+        "picture": "https://avatars.githubusercontent.com/u/60633249?v=4"
+      },
+      "collection": "posts",
+      "publishedAt": "2026-02-14T16:01:17.442Z",
+      "slug": "sup-new-page",
+      "status": "published",
+      "tags": [
+      ],
+      "title": "Sup new page"
     }
   ]
 }
