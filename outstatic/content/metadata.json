@@ -1,6 +1,6 @@
 {
-  "commit": "f1d49d79a01c1d85981f368c71944529e6583183",
-  "generated": "2026-02-14T15:12:37.450Z",
+  "commit": "d010c2be649d505608998a82b9801a5f18293a73",
+  "generated": "2026-02-14T15:15:13.719Z",
   "metadata": [
     {
       "__outstatic": {
@@ -139,8 +139,8 @@
     },
     {
       "__outstatic": {
-        "commit": "f1d49d79a01c1d85981f368c71944529e6583183",
-        "hash": "1320544870",
+        "commit": "d010c2be649d505608998a82b9801a5f18293a73",
+        "hash": "2458063061",
         "path": "examples/basic-blog/outstatic/content/pages/test-new-page.mdx"
       },
       "author": {
@@ -150,7 +150,7 @@
       "collection": "pages",
       "publishedAt": "2026-02-14T15:54:15.623Z",
       "slug": "test-new-page",
-      "status": "draft",
+      "status": "published",
       "title": "Test New Page"
     }
   ]
