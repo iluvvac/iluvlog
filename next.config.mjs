@@ -9,9 +9,10 @@ const nextConfig = {
       },
     ],
   },
-  // Tambahkan baris ini untuk menyelesaikan Error: Call retries were exceeded
   experimental: {
-    turbopack: {}, 
+    turbo: {
+      rules: {},
+    },
   },
   webpack: (config) => {
     config.resolve.fallback = { fs: false };
