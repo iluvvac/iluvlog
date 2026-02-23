@@ -33,7 +33,7 @@
       "required": true,
       "fieldType": "Text",
       "dataType": "string",
-      "title": "description"
+      "title": "Description"
     }
   }
 }
