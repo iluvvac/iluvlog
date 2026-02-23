@@ -1,6 +1,6 @@
 {
-  "commit": "a579e4f7a5fddf25dca91acc019484c6974885dc",
-  "generated": "2026-02-23T13:24:19.892Z",
+  "commit": "45c4224713ac5e5251109237765a33c79f4eb2ff",
+  "generated": "2026-02-23T13:24:25.115Z",
   "metadata": [
     {
       "__outstatic": {
@@ -162,8 +162,8 @@
     },
     {
       "__outstatic": {
-        "commit": "a579e4f7a5fddf25dca91acc019484c6974885dc",
-        "hash": "1239128651",
+        "commit": "45c4224713ac5e5251109237765a33c79f4eb2ff",
+        "hash": "1069139023",
         "path": "examples/basic-blog/outstatic/content/posts/new-post-here.mdx"
       },
       "author": {
@@ -174,7 +174,7 @@
       "coverImage": "https://images.unsplash.com/photo-1770037367722-5444567fcb52?q=80&w=2274&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "publishedAt": "2026-02-23T14:04:49.949Z",
       "slug": "new-post-here",
-      "status": "draft",
+      "status": "published",
       "tags": [
       ],
       "title": "New post here"
