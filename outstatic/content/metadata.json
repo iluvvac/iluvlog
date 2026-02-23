@@ -1,6 +1,6 @@
 {
-  "commit": "a4c856071b8fbcdca39de60af78e7291dbc598fc",
-  "generated": "2026-02-23T13:03:44.115Z",
+  "commit": "9af43b668d0b51ea1c10ac9e06190b52e6ea0a67",
+  "generated": "2026-02-23T13:05:17.340Z",
   "metadata": [
     {
       "__outstatic": {
@@ -139,8 +139,8 @@
     },
     {
       "__outstatic": {
-        "commit": "834bf2fb0975d36c679e56bc97dd7ed39bb08bff",
-        "hash": "2580612831",
+        "commit": "9af43b668d0b51ea1c10ac9e06190b52e6ea0a67",
+        "hash": "1971713779",
         "path": "examples/basic-blog/outstatic/content/posts/sup-new-page.mdx"
       },
       "author": {
@@ -152,8 +152,12 @@
       "slug": "sup-new-page",
       "status": "published",
       "tags": [
+        {
+          "label": "NextJs",
+          "value": "nextJs"
+        }
       ],
-      "title": "Sup new page"
+      "title": "New page on progress"
     }
   ]
 }
