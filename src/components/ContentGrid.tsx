@@ -13,58 +13,48 @@ type Props = {
   priority?: boolean
 }
 
-const ContentGrid = ({
-  title = 'More',
-  items,
-  collection,
-  priority = false
-}: Props) => {
+const ContentGrid = ({ title, items, collection, priority = false }: Props) => {
   return (
     <section id={collection}>
-      <h2 className="mb-8 text-5xl md:text-6xl font-bold tracking-tighter leading-tight">
-        {title}
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 sm:gap-x-6 lg:gap-x-8 gap-y-5 sm:gap-y-6 lg:gap-y-8 mb-8">
+      <div className="flex items-center gap-3 mb-8 border-b border-slate-100 pb-2">
+        <span className="text-slate-400 text-lg">▼</span>
+        <h2 className="text-sm font-bold tracking-tight text-slate-500 uppercase">{title}</h2>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item, id) => (
-          <Link key={item.slug} href={`/${collection}/${item.slug}`}>
-            <div className="cursor-pointer border project-card rounded-md md:w-full scale-100 hover:scale-[1.02] active:scale-[0.97] motion-safe:transform-gpu transition duration-100 motion-reduce:hover:scale-100 hover:shadow-xs overflow-hidden">
-              <div className="sm:mx-0">
+          <Link key={item.slug} href={`/${collection}/${item.slug}`} className="group">
+            <div className="bg-white border border-slate-100 group-hover:border-slate-300 group-hover:shadow-md transition-all duration-200">
+              <div className="relative aspect-video overflow-hidden border-b border-slate-100">
                 <Image
                   src={item.coverImage ?? ''}
-                  alt={`Cover Image for ${item.title}`}
-                  className="object-cover object-center w-full h-auto"
-                  width={0}
-                  height={0}
-                  sizes="(min-width: 768px) 347px, 192px"
+                  alt={item.title}
+                  className="object-cover grayscale group-hover:grayscale-0 transition-all"
+                  fill
                   priority={priority && id <= 2}
                 />
-                {collection === 'projects' && (
-                  <h2 className="p-2 bg-opacity-80 bg-white text-center whitespace-nowrap font-bold text-3xl absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 shadow-lg rounded-lg">
-                    {item.title}
-                  </h2>
-                )}
               </div>
-              {collection === 'posts' && (
-                <div className="p-4">
-                  {Array.isArray(item?.tags)
-                    ? item.tags.map(({ label }) => (
-                        <span
-                          key={label}
-                          className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
-                        >
-                          {label}
-                        </span>
-                      ))
-                    : null}
-                  <h3 className="text-xl mb-2 leading-snug font-bold hover:underline">
-                    {item.title}
-                  </h3>
-                  <div className="text-md mb-4 text-slate-700"></div>
-                  <p className="text-lg leading-relaxed mb-4">
-                    {item.description}
+
+              <div className="p-5">
+                <h3 className="text-md font-bold text-slate-800 mb-2 leading-tight group-hover:text-blue-600 transition truncate">
+                  <span className="text-slate-400 mr-2">fn</span>
+                  {item.title}
+                </h3>
+                
+                {collection === 'posts' && (
+                  <p className="text-slate-500 text-xs leading-relaxed line-clamp-2 italic">
+                    {`/* ${item.description} */`}
                   </p>
+                )}
+                
+                <div className="mt-4 flex flex-wrap gap-1">
+                  {item.tags?.map((tag) => (
+                    <span key={tag.value} className="text-[10px] text-slate-400">
+                      .{tag.label.toLowerCase()}
+                    </span>
+                  ))}
                 </div>
-              )}
+              </div>
             </div>
           </Link>
         ))}

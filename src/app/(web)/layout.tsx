@@ -1,6 +1,7 @@
 import { absoluteUrl } from '@/lib/utils'
 import { Metadata } from 'next'
 import '@/styles/index.css'
+import 'highlight.js/styles/github.css'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://outstatic.com'),
