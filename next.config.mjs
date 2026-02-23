@@ -1,4 +1,7 @@
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  
   images: {
     remotePatterns: [
       {
@@ -7,5 +10,11 @@ const nextConfig = {
       },
     ],
   },
+
+  webpack: (config) => {
+    config.resolve.fallback = { fs: false };
+    return config;
+  },
 };
+
 export default nextConfig;
