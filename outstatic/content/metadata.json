@@ -141,7 +141,7 @@
       "__outstatic": {
         "commit": "ef2c74857dd546156fc1b90ed47618a406c684eb",
         "hash": "1201491457",
-        "path": "examples/basic-blog/outstatic/content/posts/sup-new-page.mdx"
+        "path": "outstatic/content/posts/sup-new-page.mdx"
       },
       "author": {
         "name": "Dasteen",
@@ -164,7 +164,7 @@
       "__outstatic": {
         "commit": "45c4224713ac5e5251109237765a33c79f4eb2ff",
         "hash": "1069139023",
-        "path": "examples/basic-blog/outstatic/content/posts/new-post-here.mdx"
+        "path": "outstatic/content/posts/new-post-here.mdx"
       },
       "author": {
         "name": "Dasteen",
@@ -183,7 +183,7 @@
       "__outstatic": {
         "commit": "c3e38888c7eb290764d6438ddfc596139e66bb49",
         "hash": "2516464352",
-        "path": "examples/basic-blog/outstatic/content/posts/another-one.md"
+        "path": "outstatic/content/posts/another-one.md"
       },
       "author": {
         "name": "Dasteen",

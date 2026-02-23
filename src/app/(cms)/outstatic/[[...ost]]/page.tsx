@@ -9,3 +9,4 @@ export default async function Page(props: {
   const ostData = await Outstatic()
   return <OstClient ostData={ostData} params={params} />
 }
+
