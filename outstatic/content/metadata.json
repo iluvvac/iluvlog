@@ -1,6 +1,6 @@
 {
-  "commit": "9af43b668d0b51ea1c10ac9e06190b52e6ea0a67",
-  "generated": "2026-02-23T13:05:17.340Z",
+  "commit": "ef2c74857dd546156fc1b90ed47618a406c684eb",
+  "generated": "2026-02-23T13:10:51.865Z",
   "metadata": [
     {
       "__outstatic": {
@@ -139,8 +139,8 @@
     },
     {
       "__outstatic": {
-        "commit": "9af43b668d0b51ea1c10ac9e06190b52e6ea0a67",
-        "hash": "1971713779",
+        "commit": "ef2c74857dd546156fc1b90ed47618a406c684eb",
+        "hash": "1201491457",
         "path": "examples/basic-blog/outstatic/content/posts/sup-new-page.mdx"
       },
       "author": {
@@ -148,6 +148,7 @@
         "picture": "https://avatars.githubusercontent.com/u/60633249?v=4"
       },
       "collection": "posts",
+      "coverImage": "https://images.unsplash.com/photo-1771681744660-d3ff70bc24a2?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       "publishedAt": "2026-02-14T16:01:17.442Z",
       "slug": "sup-new-page",
       "status": "published",
