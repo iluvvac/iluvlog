@@ -27,6 +27,13 @@
       "fieldType": "Image",
       "dataType": "image",
       "title": "Cover Image"
+    },
+    "description": {
+      "description": "Meta Desc",
+      "required": true,
+      "fieldType": "Text",
+      "dataType": "string",
+      "title": "description"
     }
   }
 }
