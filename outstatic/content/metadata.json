@@ -1,6 +1,6 @@
 {
-  "commit": "834bf2fb0975d36c679e56bc97dd7ed39bb08bff",
-  "generated": "2026-02-14T15:19:37.917Z",
+  "commit": "a4c856071b8fbcdca39de60af78e7291dbc598fc",
+  "generated": "2026-02-23T13:03:44.115Z",
   "metadata": [
     {
       "__outstatic": {
@@ -136,22 +136,6 @@
       "slug": "flycream-travel",
       "status": "published",
       "title": "Flycream Travel"
-    },
-    {
-      "__outstatic": {
-        "commit": "d010c2be649d505608998a82b9801a5f18293a73",
-        "hash": "2458063061",
-        "path": "examples/basic-blog/outstatic/content/pages/test-new-page.mdx"
-      },
-      "author": {
-        "name": "Dasteen",
-        "picture": "https://avatars.githubusercontent.com/u/60633249?v=4"
-      },
-      "collection": "pages",
-      "publishedAt": "2026-02-14T15:54:15.623Z",
-      "slug": "test-new-page",
-      "status": "published",
-      "title": "Test New Page"
     },
     {
       "__outstatic": {
