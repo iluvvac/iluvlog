@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  
   images: {
     remotePatterns: [
       {
@@ -10,7 +9,10 @@ const nextConfig = {
       },
     ],
   },
-
+  // Tambahkan baris ini untuk menyelesaikan Error: Call retries were exceeded
+  experimental: {
+    turbopack: {}, 
+  },
   webpack: (config) => {
     config.resolve.fallback = { fs: false };
     return config;
