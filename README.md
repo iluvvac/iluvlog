@@ -1,6 +1,23 @@
-# A statically generated blog example using Outstatic and Next.js
+# iluvlog
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Favitorio%2Foutstatic%2Ftree%2Fmain%2Fexamples%2Fbasic-blog&env=OST_GITHUB_ID,OST_GITHUB_SECRET&project-name=outstatic-blog&repo-name=outstatic-blog&demo-title=Outstatic%20Blog%20Demo&demo-description=A%20statically%20generated%20blog%20example%20using%20Outstatic&demo-url=https%3A%2F%2Foutstatic-example-blog.vercel.app%2F&demo-image=https%3A%2F%2Foutstatic.com%2Fimages%2Foutstatic-demo.png&envDescription=API%20Keys%20needed%20for%20installation&envLink=https%3A%2F%2Foutstatic.com%2Fdocs%2Fenvironment-variables)
+Personal blog for [blog.dast.in](https://blog.dast.in).
 
-Please, visit our [getting started](https://outstatic.com/docs/getting-started) guide.
-Don't forget to check the `.env.local.example` file for environment variables.
+---
+
+## Tech Stack
+
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Outstatic](https://img.shields.io/badge/Outstatic-000000?style=for-the-badge&logo=github&logoColor=white)](https://outstatic.com/)
+
+
+---
+
+## Connect
+
+- [LinkedIn](https://linkedin.com/in/dastindarmawan)
+- [Instagram](https://www.instagram.com/dastindrmwn/)
+- [Email](mailto:hello@dast.in)
+
+---
