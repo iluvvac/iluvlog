@@ -1,6 +1,6 @@
 {
-  "commit": "295de77d95104092ff883a3b2b8ed462b4d2cdc6",
-  "generated": "2026-02-24T07:48:54.935Z",
+  "commit": "da0152328bd62825f3aaad7f06621b5d8190ecd0",
+  "generated": "2026-02-24T07:49:01.337Z",
   "metadata": [
     {
       "__outstatic": {
@@ -84,23 +84,6 @@
       "slug": "nothing-wrong",
       "status": "published",
       "title": "Nothing is wrong. Everything is perfect"
-    },
-    {
-      "__outstatic": {
-        "commit": "aa1f387e5c66347e675bed0862b070d8946c95f4",
-        "hash": "1055690014",
-        "path": "/outstatic/content/projects/couple-pizza.md"
-      },
-      "author": {
-        "name": "Bob Marley"
-      },
-      "collection": "projects",
-      "coverImage": "/images/couple-pizza.png",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
-      "publishedAt": "2022-03-16T05:35:07.322Z",
-      "slug": "couple-pizza",
-      "status": "published",
-      "title": "Couple Pizza"
     },
     {
       "__outstatic": {
