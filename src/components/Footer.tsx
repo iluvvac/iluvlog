@@ -26,7 +26,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
           <div className="md:col-span-6 space-y-4">
             <div className="text-sm font-black text-slate-900 uppercase tracking-tighter">
-              dasteen<span className="text-blue-600">.</span>in
+              blog.dast<span className="text-blue-600">.</span>in
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed max-w-xs">
               // Personal notes on technology, design, and the curiosities in between.
