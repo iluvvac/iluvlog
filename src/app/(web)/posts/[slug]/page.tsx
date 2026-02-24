@@ -73,7 +73,8 @@ export default async function Post(props: { params: Params }) {
   const params = await props.params
   const { post, otherPosts } = await getData(params)
   const headings = getHeadings(post.content)
-  const shareUrl = absoluteUrl(`/posts/${post.slug}`)
+  // const shareUrl = absoluteUrl(`/posts/${post.slug}`)
+  const shareUrl = `https://blog.dast.in/posts/${post.slug}` //hardcode sementara
 
   return (
     <Layout>
