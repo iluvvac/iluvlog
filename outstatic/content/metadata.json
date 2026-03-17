@@ -1,6 +1,6 @@
 {
-  "commit": "73e0d7030b0f30efafb7e24369fba8fe2256129c",
-  "generated": "2026-03-17T13:26:02.260Z",
+  "commit": "d65d5118634089eb180961bb4befdde1811a84ff",
+  "generated": "2026-03-17T13:26:06.609Z",
   "metadata": [
     {
       "__outstatic": {
@@ -67,23 +67,6 @@
       "slug": "the-wrong-decision",
       "status": "published",
       "title": "If you want to make the wrong decision, ask everyone"
-    },
-    {
-      "__outstatic": {
-        "commit": "d2f316fd04def3347c906f5227da5daf79971f61",
-        "hash": "4086614036",
-        "path": "/outstatic/content/posts/nothing-wrong.md"
-      },
-      "author": {
-        "name": "Andre Vitorio"
-      },
-      "collection": "posts",
-      "coverImage": "/images/industrial-pattern.png",
-      "description": "One more day, one more joy. I feel blessed.",
-      "publishedAt": "2022-09-14T17:55:40.452Z",
-      "slug": "nothing-wrong",
-      "status": "published",
-      "title": "Nothing is wrong. Everything is perfect"
     }
   ]
 }
