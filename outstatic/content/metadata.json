@@ -1,6 +1,6 @@
 {
-  "commit": "3e775ebc2d5f82cfaede277f6b27bc6cdb5bb3a0",
-  "generated": "2026-03-17T13:25:53.240Z",
+  "commit": "89998bc03e5d86def543ec38e87b27641b1792bc",
+  "generated": "2026-03-17T13:25:58.279Z",
   "metadata": [
     {
       "__outstatic": {
@@ -107,25 +107,6 @@
         }
       ],
       "title": "New page on progress"
-    },
-    {
-      "__outstatic": {
-        "commit": "45c4224713ac5e5251109237765a33c79f4eb2ff",
-        "hash": "1069139023",
-        "path": "outstatic/content/posts/new-post-here.mdx"
-      },
-      "author": {
-        "name": "Dasteen",
-        "picture": "https://avatars.githubusercontent.com/u/60633249?v=4"
-      },
-      "collection": "posts",
-      "coverImage": "https://images.unsplash.com/photo-1770037367722-5444567fcb52?q=80&w=2274&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "publishedAt": "2026-02-23T14:04:49.949Z",
-      "slug": "new-post-here",
-      "status": "published",
-      "tags": [
-      ],
-      "title": "New post here"
     }
   ]
 }
