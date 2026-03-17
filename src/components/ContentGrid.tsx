@@ -28,7 +28,7 @@ const ContentGrid = ({ title, items, collection, priority = false }: Props) => {
           <div className="h-px flex-1 bg-slate-100"></div>
         </div>
         <div className="p-12 text-center bg-white rounded-xl border border-dashed border-slate-200 font-mono text-[10px] text-slate-300 uppercase tracking-widest">
-          empty_directory.sys
+          Empty
         </div>
       </section>
     )

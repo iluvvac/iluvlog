@@ -187,14 +187,27 @@ export default async function Index() {
           </div>
 
           {/* Right Floating Folders (Desktop Only) */}
-          <div className="hidden lg:flex flex-col gap-10 items-center pt-4">
-            {["life", "design", "random"].map((folder) => (
-              <div key={folder} className="flex flex-col items-center gap-1 cursor-pointer group">
-                <div className="w-14 h-11 bg-blue-400/90 rounded-sm relative border-t-[6px] border-blue-300 shadow-sm group-hover:brightness-110 transition-all"></div>
-                <span className="text-[11px] font-bold text-white drop-shadow-md tracking-tight uppercase">{folder}</span>
-              </div>
+          {/* <div className="hidden lg:flex flex-col gap-8 items-center pt-4">
+            {[
+              { label: "portfolio", href: "https://dast.in" },
+              { label: "about", href: "/about" },
+              { label: "photo", href: "/about" }
+            ].map((folder) => (
+              <Link key={folder.label} href={folder.href} className="flex flex-col items-center gap-1 cursor-pointer group">
+                <div className="w-16 h-16 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 drop-shadow-md">
+                   <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 80 80">
+                    <g fill="none">
+                      <path fill="#d9a402" fillRule="evenodd" d="M16 17a4 4 0 0 0-4 4v38a4 4 0 0 0 4 4h48a4 4 0 0 0 4-4V29a4 4 0 0 0-4-4H35.4c-.367 0-.711-.177-.924-.475l-.34-.474l-.376-.526l-.377-.525l-3.099-4.329A4 4 0 0 0 27.032 17z" clipRule="evenodd"/>
+                      <rect width="56" height="38" x="12" y="25" fill="#f2c94c" rx="4"/>
+                    </g>
+                  </svg>
+                </div>
+                <span className="text-[11px] font-bold text-white drop-shadow-md tracking-tight uppercase bg-black/20 px-2 py-0.5 rounded-sm backdrop-blur-sm">
+                  {folder.label}
+                </span>
+              </Link>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </Layout>

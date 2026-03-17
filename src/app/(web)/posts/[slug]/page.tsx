@@ -79,7 +79,7 @@ export default async function Post(props: { params: Params }) {
     <Layout>
       <div 
         className="min-h-screen bg-cover bg-center font-sans text-[#1c1c1e] pb-32 flex flex-col items-center bg-fixed"
-        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1771814574443-66eef88531f3?q=80&w=3432&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)' }}
+        style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)' }}
       >
         
         <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-[#e5e5ea] w-full mb-6 md:mb-10">
@@ -191,7 +191,7 @@ export default async function Post(props: { params: Params }) {
 
         {/* Wrapper untuk bagian More Notes di mobile */}
         {otherPosts.length > 0 && (
-          <div className="w-full max-w-3xl mt-8 md:mt-12 mb-20 px-4 md:px-0">
+          <div className="w-full max-w-3xl mt-8 md:mt-12 px-4 md:px-0">
             <div className="bg-white/95 backdrop-blur-md rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] border border-[#d1d1d6] p-5 md:p-8">
               <h3 className="text-xl font-bold tracking-tight text-[#1c1c1e] mb-6 flex items-center gap-2">
                 <span className="text-2xl">📓</span> More Notes
