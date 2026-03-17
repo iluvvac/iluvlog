@@ -1,6 +1,6 @@
 {
-  "commit": "89998bc03e5d86def543ec38e87b27641b1792bc",
-  "generated": "2026-03-17T13:25:58.279Z",
+  "commit": "73e0d7030b0f30efafb7e24369fba8fe2256129c",
+  "generated": "2026-03-17T13:26:02.260Z",
   "metadata": [
     {
       "__outstatic": {
@@ -84,29 +84,6 @@
       "slug": "nothing-wrong",
       "status": "published",
       "title": "Nothing is wrong. Everything is perfect"
-    },
-    {
-      "__outstatic": {
-        "commit": "ef2c74857dd546156fc1b90ed47618a406c684eb",
-        "hash": "1201491457",
-        "path": "outstatic/content/posts/sup-new-page.mdx"
-      },
-      "author": {
-        "name": "Dasteen",
-        "picture": "https://avatars.githubusercontent.com/u/60633249?v=4"
-      },
-      "collection": "posts",
-      "coverImage": "https://images.unsplash.com/photo-1771681744660-d3ff70bc24a2?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "publishedAt": "2026-02-14T16:01:17.442Z",
-      "slug": "sup-new-page",
-      "status": "published",
-      "tags": [
-        {
-          "label": "NextJs",
-          "value": "nextJs"
-        }
-      ],
-      "title": "New page on progress"
     }
   ]
 }
