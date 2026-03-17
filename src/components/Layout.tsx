@@ -10,7 +10,7 @@ const Layout = ({ children }: Props) => {
       <div className="min-h-screen">
         <main>{children}</main>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }
