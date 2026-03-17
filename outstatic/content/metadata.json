@@ -1,6 +1,6 @@
 {
-  "commit": "63b94e8217b88ae562ba4a0c1d538d6473bd69db",
-  "generated": "2026-03-17T13:26:11.079Z",
+  "commit": "8bd9584a817aae01f81b0204a68c77c14f3404e0",
+  "generated": "2026-03-17T13:26:16.188Z",
   "metadata": [
     {
       "__outstatic": {
@@ -19,23 +19,6 @@
       "slug": "home",
       "status": "published",
       "title": "Home"
-    },
-    {
-      "__outstatic": {
-        "commit": "998b7f74af83e46bbdb4ab5302c8e4c39963278f",
-        "hash": "3707858083",
-        "path": "/outstatic/content/posts/the-wrong-decision.md"
-      },
-      "author": {
-        "name": "Naval Ravikant"
-      },
-      "collection": "posts",
-      "coverImage": "/images/skyline.png",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
-      "publishedAt": "2022-03-26T05:35:07.322Z",
-      "slug": "the-wrong-decision",
-      "status": "published",
-      "title": "If you want to make the wrong decision, ask everyone"
     }
   ]
 }
