@@ -1,6 +1,6 @@
 {
-  "commit": "da0152328bd62825f3aaad7f06621b5d8190ecd0",
-  "generated": "2026-02-24T07:49:01.337Z",
+  "commit": "3e775ebc2d5f82cfaede277f6b27bc6cdb5bb3a0",
+  "generated": "2026-03-17T13:25:53.240Z",
   "metadata": [
     {
       "__outstatic": {
@@ -126,30 +126,6 @@
       "tags": [
       ],
       "title": "New post here"
-    },
-    {
-      "__outstatic": {
-        "commit": "c3e38888c7eb290764d6438ddfc596139e66bb49",
-        "hash": "2516464352",
-        "path": "outstatic/content/posts/another-one.md"
-      },
-      "author": {
-        "name": "Dasteen",
-        "picture": "https://avatars.githubusercontent.com/u/60633249?v=4"
-      },
-      "collection": "posts",
-      "coverImage": "https://images.unsplash.com/photo-1583249886641-cfa29bb4d321?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "description": "Test",
-      "publishedAt": "2026-02-23T14:10:38.596Z",
-      "slug": "another-one",
-      "status": "published",
-      "tags": [
-        {
-          "label": "Outstatic",
-          "value": "outstatic"
-        }
-      ],
-      "title": "Another one"
     }
   ]
 }
