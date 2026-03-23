@@ -29,7 +29,7 @@ export default async function Index() {
       description: "Turn images into custom ASCII text patterns",
       icon: "🔤",
       coverImage:
-        "/images/Cover_Typegrid.jpg",
+        "/images/Cover_Typegrid_Fix.jpg",
       href: "/tools/ascii-text-pattern",
       tags: ["Vector", "Image"],
     },
