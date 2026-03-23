@@ -1,8 +1,8 @@
 # iluvlog
 
-Personal blog for [blog.dast.in](https://blog.dast.in).
+Personal blog
 
----
+[Visit Live Site](https://blog.dast.in)
 
 ## Tech Stack
 
@@ -11,13 +11,6 @@ Personal blog for [blog.dast.in](https://blog.dast.in).
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Outstatic](https://img.shields.io/badge/Outstatic-000000?style=for-the-badge&logo=github&logoColor=white)](https://outstatic.com/)
 
-
----
-
 ## Connect
 
-- [LinkedIn](https://linkedin.com/in/dastindarmawan)
-- [Instagram](https://www.instagram.com/dastindrmwn/)
-- [Email](mailto:hello@dast.in)
-
----
+[LinkedIn](https://linkedin.com/in/dastindarmawan) | [Instagram](https://www.instagram.com/dastindrmwn/) | [Email](mailto:hello@dast.in)

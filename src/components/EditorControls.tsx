@@ -55,7 +55,7 @@ export default function EditorControls({ state, setters, canvasRef }: any) {
     if (!canvasRef.current) return
     if (type === 'png') {
       const link = document.createElement('a')
-      link.download = 'typegrid-art.png'
+      link.download = 'ascii-text.png'
       link.href = canvasRef.current.toDataURL('image/png')
       link.click()
       setters.showToast('Downloaded as PNG')
@@ -66,7 +66,7 @@ export default function EditorControls({ state, setters, canvasRef }: any) {
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
       link.href = url
-      link.download = 'typegrid-vector.svg'
+      link.download = 'ascii-text-vector.svg'
       link.click()
       URL.revokeObjectURL(url)
       setters.showToast('Downloaded as SVG')

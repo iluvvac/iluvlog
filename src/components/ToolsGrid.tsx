@@ -72,10 +72,10 @@ export default function ToolsGrid({ title, items, priority = false }: Props) {
             </div>
 
             <div className="flex flex-col gap-3 px-1">
-              <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 uppercase tracking-widest border-b border-slate-50 pb-1">
+              {/* <div className="flex justify-between items-center text-[9px] font-mono text-slate-400 uppercase tracking-widest border-b border-slate-50 pb-1">
                 <span>Interactive Tool</span>
                 <span className="font-bold text-slate-400 uppercase">Dasteen</span>
-              </div>
+              </div> */}
 
               <h3 className="text-[16px] font-black text-slate-900 leading-tight uppercase transition-colors group-hover:text-blue-600">
                 {item.title}

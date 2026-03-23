@@ -1,7 +1,55 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { drawBackgroundPreset } from '@/lib/backgroundPresets'
 
 export default function PreviewCanvas({ canvasRef, state }: any) {
+  const [zoom, setZoom] = useState(1)
+  const [pan, setPan] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+
+  const containerRef = useRef<HTMLDivElement>(null)
+  const dragStart = useRef({ x: 0, y: 0 })
+
+  const handleZoomIn = () => setZoom(prev => Math.min(prev + 0.25, 4))
+  const handleZoomOut = () => setZoom(prev => Math.max(prev - 0.25, 0.25))
+  
+  const handleZoomReset = () => {
+    setZoom(1)
+    setPan({ x: 0, y: 0 })
+  }
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true)
+    dragStart.current = { x: e.clientX - pan.x, y: e.clientY - pan.y }
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return
+    setPan({
+      x: e.clientX - dragStart.current.x,
+      y: e.clientY - dragStart.current.y
+    })
+  }
+
+  const handleMouseUpOrLeave = () => {
+    setIsDragging(false)
+  }
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault()
+        const zoomSensitivity = 0.01
+        setZoom(prev => Math.min(Math.max(prev - e.deltaY * zoomSensitivity, 0.1), 5))
+      }
+    }
+
+    container.addEventListener('wheel', handleWheel, { passive: false })
+    return () => container.removeEventListener('wheel', handleWheel)
+  }, [])
+
   useEffect(() => {
     if (!state.imageSrc || !canvasRef.current) return
     const canvas = canvasRef.current
@@ -183,19 +231,49 @@ export default function PreviewCanvas({ canvasRef, state }: any) {
     img.src = state.imageSrc
   }, [state, canvasRef])
 
-  const wrapperBg = state.bgMode === 'solid' ? state.bgColor : state.bgMode === 'preset' ? '#121212' : 'transparent';
-  const checkerBoard = state.bgMode === 'none' ? 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAO0lEQVQYV2NkYGAwYkADjDgkGTGI4lUAk8RwGbrimCawSsZRCe6P4TJMxTB12BSjS8LkI7gEw9QBAF0hDBXn+c4zAAAAAElFTkSuQmCC")' : 'none';
+  const wrapperBg = state.bgMode === 'solid' ? state.bgColor : state.bgMode === 'preset' ? '#121212' : 'transparent'
+  const checkerBoard = state.bgMode === 'none' ? 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAO0lEQVQYV2NkYGAwYkADjDgkGTGI4lUAk8RwGbrimCawSsZRCe6P4TJMxTB12BSjS8LkI7gEw9QBAF0hDBXn+c4zAAAAAElFTkSuQmCC")' : 'none'
 
   return (
-    <div className="w-full md:flex-1 flex-1 md:h-auto flex items-center justify-center p-4 md:p-8 overflow-hidden relative order-1 md:order-2" 
-         style={{ backgroundColor: wrapperBg, backgroundImage: checkerBoard }}>
-      {!state.imageSrc && (
-        <div className="absolute flex flex-col items-center gap-4 text-neutral-500 pointer-events-none">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <div className="text-sm font-medium tracking-wide">Waiting for source image</div>
-        </div>
-      )}
-      <canvas ref={canvasRef} className="max-w-full max-h-full object-contain drop-shadow-2xl rounded-sm transition-opacity duration-500" style={{ opacity: state.imageSrc ? 1 : 0 }}></canvas>
+    <div className="w-full md:flex-1 flex-1 md:h-auto flex flex-col p-0 overflow-hidden relative order-1 md:order-2" style={{ backgroundColor: wrapperBg, backgroundImage: checkerBoard }}>
+
+      <div className="absolute top-4 right-4 z-50 flex gap-1 bg-[#1c1c1e] p-1 rounded-lg border border-white/10 shadow-xl">
+        <button onClick={handleZoomOut} className="w-8 h-8 flex items-center justify-center text-white hover:bg-[#3a3a3c] rounded-md transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </button>
+        <button onClick={handleZoomReset} className="px-3 text-xs font-mono font-medium text-neutral-300 hover:bg-[#3a3a3c] rounded-md transition-colors">
+          {Math.round(zoom * 100)}%
+        </button>
+        <button onClick={handleZoomIn} className="w-8 h-8 flex items-center justify-center text-white hover:bg-[#3a3a3c] rounded-md transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </button>
+      </div>
+
+      <div 
+        ref={containerRef} 
+        className={`w-full h-full flex items-center justify-center overflow-hidden p-4 md:p-8 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUpOrLeave}
+        onMouseLeave={handleMouseUpOrLeave}
+      >
+        {!state.imageSrc && (
+          <div className="absolute flex flex-col items-center gap-4 text-neutral-500 pointer-events-none">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="opacity-50"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <div className="text-sm font-medium tracking-wide">Waiting for source image</div>
+          </div>
+        )}
+        <canvas 
+          ref={canvasRef} 
+          className={`max-w-full max-h-full object-contain drop-shadow-2xl rounded-sm transition-transform ${isDragging ? 'duration-0' : 'duration-200 ease-out'}`} 
+          style={{ 
+            opacity: state.imageSrc ? 1 : 0, 
+            transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, 
+            transformOrigin: 'center' 
+          }}
+        ></canvas>
+      </div>
+
     </div>
   )
 }

@@ -26,8 +26,8 @@ export default function TypeGridStudio() {
   const [effects, setEffects] = useState({
     gleam: { active: false, value: 12 },
     radiance: { active: false, value: 15 },
-    glass: { active: false, value: 15 },
-    noise: { active: false, value: 15 },
+    // glass: { active: false, value: 15 },
+    // noise: { active: false, value: 15 },
     chromatic: { active: false, value: 2 },
     scanlines: { active: false, value: 15 },
     vignette: { active: false, value: 80 }
