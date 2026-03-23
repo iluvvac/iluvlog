@@ -16,6 +16,7 @@
     "next": "16.1.1",
     "outstatic": "latest",
     "react": "19.1.2",
+    "react-colorful": "^5.6.1",
     "react-dom": "19.1.2",
     "remark": "^14.0.3",
     "remark-html": "^15.0.2",

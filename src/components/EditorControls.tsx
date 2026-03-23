@@ -1,10 +1,56 @@
-import React, { ChangeEvent, useState } from 'react'
+import { HexColorPicker } from "react-colorful";
+import React, { ChangeEvent, useState, useRef, useEffect } from 'react'
 import { generateSVGString } from '@/lib/svgGenerator'
 
 const DownloadIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
 const CopyIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
 const ImageIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
 const VectorIcon = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"/></svg>
+
+const ColorPickerItem = ({ value, onChange, label }: { value: string, onChange: (val: string) => void, label?: string }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const popoverRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        setIsOpen(false)
+      }
+    }
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
+
+  return (
+    <div className="flex flex-col gap-1 w-full relative" ref={popoverRef}>
+      {label && <label className="text-[9px] text-neutral-500 uppercase">{label}</label>}
+      
+      {/* Input Group */}
+      <div className="flex items-center bg-[#1c1c1e] border border-white/10 rounded-lg focus-within:border-blue-500 focus-within:ring-1 transition-all h-8">
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-8 h-full shrink-0 border-r border-white/10 rounded-l-lg cursor-pointer transition-transform active:scale-95"
+          style={{ backgroundColor: value }}
+        />
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          maxLength={7}
+          className="bg-transparent text-white text-xs w-full px-2 outline-none uppercase font-mono"
+        />
+      </div>
+
+      {/* Floating Overlay Popover */}
+      {isOpen && (
+        <div className="absolute z-[100] top-[calc(100%+8px)] right-0 bg-[#2c2c2e] p-3 rounded-xl border border-white/10 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+          <HexColorPicker color={value} onChange={onChange} />
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function EditorControls({ state, setters, canvasRef }: any) {
   const [actionState, setActionState] = useState<'none' | 'download' | 'copy'>('none')
@@ -149,19 +195,9 @@ export default function EditorControls({ state, setters, canvasRef }: any) {
           </div>
         ) : (
           <div className="flex gap-3 pt-2">
-            <div className="flex-1 flex flex-col gap-1">
-              <label className="text-[9px] text-neutral-500 uppercase">Primary</label>
-              <div className="h-8 rounded-lg overflow-hidden border border-white/10 relative">
-                <input type="color" value={state.colorOne} onChange={(e) => setters.setColorOne(e.target.value)} className="absolute -top-2 -left-2 w-16 h-16 cursor-pointer" />
-              </div>
-            </div>
+            <ColorPickerItem label="Primary" value={state.colorOne} onChange={(val) => setters.setColorOne(val)} />
             {state.colorMode === 'duotone' && (
-              <div className="flex-1 flex flex-col gap-1">
-                <label className="text-[9px] text-neutral-500 uppercase">Secondary</label>
-                <div className="h-8 rounded-lg overflow-hidden border border-white/10 relative">
-                  <input type="color" value={state.colorTwo} onChange={(e) => setters.setColorTwo(e.target.value)} className="absolute -top-2 -left-2 w-16 h-16 cursor-pointer" />
-                </div>
-              </div>
+              <ColorPickerItem label="Secondary" value={state.colorTwo} onChange={(val) => setters.setColorTwo(val)} />
             )}
           </div>
         )}
@@ -170,7 +206,7 @@ export default function EditorControls({ state, setters, canvasRef }: any) {
       <div className="bg-[#2c2c2e] p-4 rounded-xl border border-white/5 flex flex-col gap-3 shadow-sm">
         <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1">Background Layer</label>
         <div className="flex bg-[#1c1c1e] rounded-lg p-1 border border-white/5 mb-2">
-          {(['solid', 'none'] as const).map(mode => ( //'preset mode is still in developing, will be added back in future update'
+          {(['solid', 'none'] as const).map(mode => ( 
             <button key={mode} onClick={() => setters.setBgMode(mode)} className={`flex-1 py-1.5 text-xs font-medium rounded-md capitalize transition-all ${state.bgMode === mode ? 'bg-[#3a3a3c] text-white shadow-sm' : 'text-neutral-500 hover:text-neutral-300'}`}>
               {mode}
             </button>
@@ -178,10 +214,10 @@ export default function EditorControls({ state, setters, canvasRef }: any) {
         </div>
         
         {state.bgMode === 'solid' && (
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-neutral-300">Solid Color</span>
-            <div className="w-6 h-6 rounded-full overflow-hidden border border-white/10 relative">
-              <input type="color" value={state.bgColor} onChange={(e) => setters.setBgColor(e.target.value)} className="absolute -top-2 -left-2 w-10 h-10 cursor-pointer" />
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm text-neutral-300 shrink-0">Solid Color</span>
+            <div className="w-28">
+              <ColorPickerItem value={state.bgColor} onChange={(val) => setters.setBgColor(val)} />
             </div>
           </div>
         )}
