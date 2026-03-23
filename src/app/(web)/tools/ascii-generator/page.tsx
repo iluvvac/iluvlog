@@ -24,6 +24,8 @@ export default function TypeGridStudio() {
   const [effects, setEffects] = useState({
     gleam: { active: false, value: 12 },
     radiance: { active: false, value: 15 },
+    glass: { active: false, value: 15 },
+    noise: { active: false, value: 15 },
     chromatic: { active: false, value: 2 },
     scanlines: { active: false, value: 15 },
     vignette: { active: false, value: 80 }
@@ -33,11 +35,7 @@ export default function TypeGridStudio() {
 
   const hexToRgb = (hex: string) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : { r: 255, g: 255, b: 255 }
+    return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : { r: 255, g: 255, b: 255 }
   }
 
   const rgbToHex = (r: number, g: number, b: number) => {
@@ -96,7 +94,8 @@ export default function TypeGridStudio() {
       const customText = text || 'X'
       let charIndex = 0
 
-      ctx.font = `bold ${size * 1.5}px -apple-system, BlinkMacSystemFont, "SF Pro Text", monospace`
+      ctx.font = `bold ${size * 1.5}px "Courier New", Courier, monospace`
+      ctx.textAlign = 'left'
       ctx.textBaseline = 'top'
 
       const stepY = size * 1.5
@@ -176,6 +175,40 @@ export default function TypeGridStudio() {
         }
       }
 
+      if (effects.glass.active) {
+        ctx.save()
+        ctx.beginPath()
+        ctx.moveTo(0, 0)
+        ctx.lineTo(targetWidth, 0)
+        ctx.lineTo(targetWidth, targetHeight * 0.4)
+        ctx.quadraticCurveTo(targetWidth * 0.5, targetHeight * 0.6, 0, targetHeight * 0.3)
+        ctx.closePath()
+        const grad = ctx.createLinearGradient(0, 0, 0, targetHeight * 0.5)
+        grad.addColorStop(0, `rgba(255,255,255,${effects.glass.value / 100})`)
+        grad.addColorStop(1, 'rgba(255,255,255,0)')
+        ctx.fillStyle = grad
+        ctx.fill()
+        ctx.restore()
+      }
+
+      if (effects.noise.active) {
+        const noiseData = ctx.createImageData(targetWidth, targetHeight)
+        const buffer32 = new Uint32Array(noiseData.data.buffer)
+        const noiseOpacity = Math.floor((effects.noise.value / 100) * 255)
+        for (let i = 0; i < buffer32.length; i++) {
+          if (Math.random() < 0.5) {
+            buffer32[i] = (noiseOpacity << 24) | (255 << 16) | (255 << 8) | 255
+          }
+        }
+        const noiseCanvas = document.createElement('canvas')
+        noiseCanvas.width = targetWidth
+        noiseCanvas.height = targetHeight
+        noiseCanvas.getContext('2d')?.putImageData(noiseData, 0, 0)
+        ctx.globalCompositeOperation = 'overlay'
+        ctx.drawImage(noiseCanvas, 0, 0)
+        ctx.globalCompositeOperation = 'source-over'
+      }
+
       if (effects.scanlines.active) {
         ctx.fillStyle = `rgba(0, 0, 0, ${effects.scanlines.value / 100})`
         for (let i = 0; i < targetHeight; i += 4) {
@@ -216,77 +249,181 @@ export default function TypeGridStudio() {
     setEffects(prev => ({ ...prev, [key]: { ...prev[key], value: val } }))
   }
 
-  const generateSVGString = () => {
-    if (!canvasRef.current || !imageSrc) return ''
-    const canvas = canvasRef.current
-    const targetWidth = canvas.width
-    const targetHeight = canvas.height
-    
-    const tempCanvas = document.createElement('canvas')
-    tempCanvas.width = targetWidth
-    tempCanvas.height = targetHeight
-    const tempCtx = tempCanvas.getContext('2d')
-    if (!tempCtx) return ''
+  const generateSVGString = (): Promise<string> => {
+    return new Promise((resolve) => {
+      if (!canvasRef.current || !imageSrc) {
+        resolve('')
+        return
+      }
+      
+      const canvas = canvasRef.current
+      const targetWidth = canvas.width
+      const targetHeight = canvas.height
+      
+      const tempCanvas = document.createElement('canvas')
+      tempCanvas.width = targetWidth
+      tempCanvas.height = targetHeight
+      const tempCtx = tempCanvas.getContext('2d')
+      if (!tempCtx) {
+        resolve('')
+        return
+      }
 
-    const img = new Image()
-    img.src = imageSrc
-    tempCtx.drawImage(img, 0, 0, targetWidth, targetHeight)
-    const imgData = tempCtx.getImageData(0, 0, targetWidth, targetHeight).data
-    
-    const factor = 255 / (colors - 1)
-    const customText = text || 'X'
-    let charIndex = 0
-    const c1 = hexToRgb(colorOne)
-    const c2 = hexToRgb(colorTwo)
-
-    let svg = `<svg width="${targetWidth}" height="${targetHeight}" xmlns="http://www.w3.org/2000/svg">`
-    svg += `<rect width="100%" height="100%" fill="${bgColor}"/>`
-    svg += `<g font-family="monospace" font-size="${size * 1.5}" font-weight="bold" dominant-baseline="text-before-edge">`
-
-    const stepY = size * 1.5
-    const stepX = size * 0.9
-
-    for (let y = 0; y < targetHeight; y += stepY) {
-      for (let x = 0; x < targetWidth; x += stepX) {
-        const pixelX = Math.floor(x)
-        const pixelY = Math.floor(y)
-        const offset = (pixelY * targetWidth + pixelX) * 4
+      const img = new Image()
+      img.onload = () => {
+        tempCtx.drawImage(img, 0, 0, targetWidth, targetHeight)
+        const imgData = tempCtx.getImageData(0, 0, targetWidth, targetHeight).data
         
-        const r = imgData[offset]
-        const g = imgData[offset + 1]
-        const b = imgData[offset + 2]
-        const a = imgData[offset + 3]
+        const factor = 255 / (colors - 1)
+        const customText = text || 'X'
+        let charIndex = 0
+        const c1 = hexToRgb(colorOne)
+        const c2 = hexToRgb(colorTwo)
+        
+        let mainTextTags = ''
+        let glowTags = ''
+        let radianceTags = ''
+        let chromaticRedTags = ''
+        let chromaticCyanTags = ''
 
-        if (a < 128 || (r > 240 && g > 240 && b > 240)) continue
+        const stepY = size * 1.5
+        const stepX = size * 0.9
 
-        let fillColor = ''
-        if (colorMode === 'original') {
-          const pr = Math.round(Math.round(r / factor) * factor)
-          const pg = Math.round(Math.round(g / factor) * factor)
-          const pb = Math.round(Math.round(b / factor) * factor)
-          fillColor = `rgb(${pr}, ${pg}, ${pb})`
-        } else if (colorMode === 'solid') {
-          fillColor = colorOne
-        } else if (colorMode === 'duotone') {
-          const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255
-          const dr = Math.round(c1.r + (c2.r - c1.r) * lum)
-          const dg = Math.round(c1.g + (c2.g - c1.g) * lum)
-          const db = Math.round(c1.b + (c2.b - c1.b) * lum)
-          fillColor = `rgb(${dr}, ${dg}, ${db})`
+        for (let y = 0; y < targetHeight; y += stepY) {
+          const yPos = Number(y.toFixed(1))
+          
+          let lineMain = `<text y="${yPos}">`
+          let lineGlow = `<text y="${yPos}">`
+          let lineRad = `<text y="${yPos}">`
+          let lineRed = `<text y="${yPos}">`
+          let lineCyan = `<text y="${yPos}">`
+          
+          let hasContent = false
+
+          for (let x = 0; x < targetWidth; x += stepX) {
+            const pixelX = Math.floor(x)
+            const pixelY = Math.floor(y)
+            const offset = (pixelY * targetWidth + pixelX) * 4
+            
+            const r = imgData[offset]
+            const g = imgData[offset + 1]
+            const b = imgData[offset + 2]
+            const a = imgData[offset + 3]
+
+            if (a < 128 || (r > 240 && g > 240 && b > 240)) continue
+            
+            hasContent = true
+            const xPos = Number(x.toFixed(1))
+
+            let fillColor = ''
+            if (colorMode === 'original') {
+              const pr = Math.round(Math.round(r / factor) * factor)
+              const pg = Math.round(Math.round(g / factor) * factor)
+              const pb = Math.round(Math.round(b / factor) * factor)
+              fillColor = `rgb(${pr}, ${pg}, ${pb})`
+            } else if (colorMode === 'solid') {
+              fillColor = colorOne
+            } else if (colorMode === 'duotone') {
+              const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+              const dr = Math.round(c1.r + (c2.r - c1.r) * lum)
+              const dg = Math.round(c1.g + (c2.g - c1.g) * lum)
+              const db = Math.round(c1.b + (c2.b - c1.b) * lum)
+              fillColor = `rgb(${dr}, ${dg}, ${db})`
+            }
+
+            const char = customText[charIndex % customText.length]
+            charIndex++
+            const safeChar = char === '<' ? '&lt;' : char === '>' ? '&gt;' : char === '&' ? '&amp;' : char
+            
+            lineMain += `<tspan x="${xPos}" fill="${fillColor}">${safeChar}</tspan>`
+            
+            if (effects.gleam.active) {
+              lineGlow += `<tspan x="${xPos}" fill="${fillColor}">${safeChar}</tspan>`
+            }
+            if (effects.radiance.active) {
+              lineRad += `<tspan x="${xPos}" fill="#ffffff">${safeChar}</tspan>`
+            }
+            if (effects.chromatic.active) {
+              lineRed += `<tspan x="${Number((x - effects.chromatic.value).toFixed(1))}">${safeChar}</tspan>`
+              lineCyan += `<tspan x="${Number((x + effects.chromatic.value).toFixed(1))}">${safeChar}</tspan>`
+            }
+          }
+          
+          lineMain += `</text>\n`
+          lineGlow += `</text>\n`
+          lineRad += `</text>\n`
+          lineRed += `</text>\n`
+          lineCyan += `</text>\n`
+
+          if (hasContent) {
+            mainTextTags += lineMain
+            if (effects.gleam.active) glowTags += lineGlow
+            if (effects.radiance.active) radianceTags += lineRad
+            if (effects.chromatic.active) {
+              chromaticRedTags += lineRed
+              chromaticCyanTags += lineCyan
+            }
+          }
         }
 
-        const char = customText[charIndex % customText.length]
-        charIndex++
-        if (char === ' ') continue
-        const safeChar = char === '<' ? '&lt;' : char === '>' ? '&gt;' : char === '&' ? '&amp;' : char
-        svg += `<text x="${x}" y="${y}" fill="${fillColor}">${safeChar}</text>`
+        let svg = `<svg width="${targetWidth}" height="${targetHeight}" xmlns="http://www.w3.org/2000/svg" style="background-color:${bgColor};">\n`
+        
+        svg += `<defs>\n`
+        if (effects.glass.active) {
+            svg += `<linearGradient id="glass-grad" x1="0" y1="0" x2="0" y2="1">\n`
+            svg += `  <stop offset="0%" stop-color="rgba(255,255,255,${effects.glass.value / 100})" />\n`
+            svg += `  <stop offset="100%" stop-color="rgba(255,255,255,0)" />\n`
+            svg += `</linearGradient>\n`
+        }
+        if (effects.scanlines.active) {
+            svg += `<pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">\n<rect width="4" height="1" fill="rgba(0,0,0,${effects.scanlines.value / 100})" />\n</pattern>\n`
+        }
+        if (effects.vignette.active) {
+            svg += `<radialGradient id="vignette">\n<stop offset="30%" stop-color="transparent" />\n<stop offset="100%" stop-color="rgba(0,0,0,${effects.vignette.value / 100})" />\n</radialGradient>\n`
+        }
+        svg += `</defs>\n`
+
+        svg += `<rect id="Canvas-Background" width="100%" height="100%" fill="${bgColor}"/>\n`
+        
+        svg += `<g id="Typography-Engine" font-family="Courier New, monospace" font-size="${size * 1.5}" font-weight="bold" text-anchor="start" dominant-baseline="text-before-edge">\n`
+        
+        if (effects.chromatic.active) {
+          svg += `<g id="Figma-Layer-Chromatic-Red" fill="#ff0000" opacity="0.6" style="mix-blend-mode: screen;">\n${chromaticRedTags}</g>\n`
+          svg += `<g id="Figma-Layer-Chromatic-Cyan" fill="#00ffff" opacity="0.6" style="mix-blend-mode: screen;">\n${chromaticCyanTags}</g>\n`
+        }
+
+        if (effects.gleam.active) {
+          svg += `<g id="Figma-Layer-Gleam-Blur" opacity="0.5">\n${glowTags}</g>\n`
+        }
+
+        if (effects.radiance.active) {
+          svg += `<g id="Figma-Layer-Radiance-Blur" opacity="0.6" style="mix-blend-mode: screen;">\n${radianceTags}</g>\n`
+        }
+
+        svg += `<g id="Figma-Main-Text">\n${mainTextTags}</g>\n`
+        
+        svg += `</g>\n`
+
+        if (effects.glass.active) {
+            svg += `<path id="Figma-Layer-Glass-Blur" d="M0,0 L${targetWidth},0 L${targetWidth},${targetHeight * 0.4} Q${targetWidth * 0.5},${targetHeight * 0.6} 0,${targetHeight * 0.3} Z" fill="url(#glass-grad)" pointer-events="none" />\n`
+        }
+
+        if (effects.scanlines.active) {
+          svg += `<rect id="Scanlines-Overlay" width="100%" height="100%" fill="url(#scanlines)" pointer-events="none" />\n`
+        }
+
+        if (effects.vignette.active) {
+          svg += `<rect id="Vignette-Overlay" width="100%" height="100%" fill="url(#vignette)" pointer-events="none" />\n`
+        }
+
+        svg += `</svg>`
+        resolve(svg)
       }
-    }
-    svg += `</g></svg>`
-    return svg
+      img.src = imageSrc
+    })
   }
 
-  const triggerDownload = (type: 'png' | 'svg') => {
+  const triggerDownload = async (type: 'png' | 'svg') => {
     if (!canvasRef.current) return
     if (type === 'png') {
       const link = document.createElement('a')
@@ -294,7 +431,7 @@ export default function TypeGridStudio() {
       link.href = canvasRef.current.toDataURL('image/png')
       link.click()
     } else {
-      const svg = generateSVGString()
+      const svg = await generateSVGString()
       if (!svg) return
       const blob = new Blob([svg], { type: 'image/svg+xml' })
       const url = URL.createObjectURL(blob)
@@ -313,14 +450,14 @@ export default function TypeGridStudio() {
       canvasRef.current.toBlob(async (blob) => {
         if (blob) {
           await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
-          alert('PNG copied to clipboard')
+          alert('Berhasil menyimpan PNG')
         }
       })
     } else {
-      const svg = generateSVGString()
+      const svg = await generateSVGString()
       if (!svg) return
       await navigator.clipboard.writeText(svg)
-      alert('SVG code copied to clipboard')
+      alert('Tersalin. Terapkan Layer Blur manual pada grup di dalam Figma.')
     }
     setActionState('none')
   }
@@ -447,7 +584,7 @@ export default function TypeGridStudio() {
                        <input 
                         type="range" 
                         min="1" 
-                        max={effectKey === 'scanlines' || effectKey === 'vignette' ? "100" : effectKey === 'gleam' || effectKey === 'radiance' ? "40" : "10"} 
+                        max={effectKey === 'scanlines' || effectKey === 'vignette' ? "100" : effectKey === 'gleam' || effectKey === 'radiance' ? "40" : "20"} 
                         value={effect.value} 
                         onChange={(e) => updateEffectValue(effectKey, Number(e.target.value))} 
                         className="accent-blue-500 w-full mb-1" 
