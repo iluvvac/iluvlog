@@ -45,7 +45,6 @@ export default async function Project(props: { params: Params }) {
           <Header />
           
           <main className="mt-12 space-y-12">
-            {/* 1. Terminal Prompt & ASCII Title */}
             <section className="space-y-6">
               <div className="flex items-center gap-2 text-blue-600 text-xs font-bold">
                 <span className="text-emerald-500">➜</span>
@@ -68,7 +67,6 @@ export default async function Project(props: { params: Params }) {
               </div>
             </section>
 
-            {/* 2. System Specs (Grid Metadata) */}
             <section className="grid grid-cols-2 md:grid-cols-4 gap-4 py-6 border-b border-slate-100">
               <div className="space-y-1">
                 <span className="text-[10px] text-slate-400 uppercase font-bold">published_at</span>
@@ -103,7 +101,6 @@ export default async function Project(props: { params: Params }) {
               </div>
             </section>
 
-            {/* 4. Documentation Body */}
             <article className="prose prose-slate max-w-none 
               prose-p:text-slate-700 prose-p:leading-relaxed prose-p:text-base
               prose-h2:text-sm prose-h2:font-black prose-h2:uppercase prose-h2:tracking-widest prose-h2:border-b prose-h2:pb-2
@@ -112,7 +109,6 @@ export default async function Project(props: { params: Params }) {
               <div dangerouslySetInnerHTML={{ __html: content }} />
             </article>
 
-            {/* 5. Process Complete */}
             <div className="pt-12 flex items-center gap-4 opacity-30 group cursor-default">
               <span className="text-[10px] font-bold">EOF</span>
               <div className="h-px flex-1 bg-slate-200"></div>
@@ -120,7 +116,6 @@ export default async function Project(props: { params: Params }) {
             </div>
           </main>
 
-          {/* Suggested Repositories */}
           <section className="mt-32">
             {moreProjects.length > 0 && (
               <div className="space-y-8">

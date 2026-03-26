@@ -2,7 +2,6 @@ import Link from 'next/link'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
-  // Mengambil tanggal hari ini untuk tampilan "Time" yang statis namun akurat saat build
   const currentDate = new Date().toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
