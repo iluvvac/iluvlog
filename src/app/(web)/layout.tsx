@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     siteName: 'Dasteen',
     images: [
       {
-        url: absoluteUrl('/images/opengraph-image.jpg'),
+        url: absoluteUrl('../opengraph-image.jpg'),
         width: 1200,
         height: 628
       }
