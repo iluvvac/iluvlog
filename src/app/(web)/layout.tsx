@@ -20,9 +20,9 @@ export const metadata: Metadata = {
     siteName: 'Dasteen',
     images: [
       {
-        url: absoluteUrl('/images/metadata_cover.jpg'),
+        url: absoluteUrl('/images/metadata_cover_compressed.jpg'),
         width: 1200,
-        height: 630
+        height: 628
       }
     ],
     locale: 'en_US',
