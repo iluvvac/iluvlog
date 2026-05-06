@@ -48,6 +48,25 @@ export default function AsciiCameraApp() {
   const [error, setError] = useState<string | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   
+  // Camera State
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
+  const [activeDeviceId, setActiveDeviceId] = useState<string | null>(null);
+  const isUserFacingRef = useRef(true);
+  
+  useEffect(() => {
+    if (activeDeviceId && devices.length > 0) {
+       const device = devices.find(d => d.deviceId === activeDeviceId);
+       if (device) {
+          const label = device.label.toLowerCase();
+          // If label contains 'back' or 'environment', it is NOT user facing
+          isUserFacingRef.current = !label.includes('back') && !label.includes('environment');
+       }
+    } else {
+       isUserFacingRef.current = facingMode === 'user';
+    }
+  }, [activeDeviceId, devices, facingMode]);
+  
   // Customization state
   const [renderStyle, setRenderStyle] = useState<string>('ascii');
   const [asciiColor, setAsciiColor] = useState('#22c55e');
@@ -91,36 +110,83 @@ export default function AsciiCameraApp() {
 
   // Initialize Camera
   useEffect(() => {
+    let isMounted = true;
+    let currentStream: MediaStream | null = null;
+    
     const startCamera = async () => {
       if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } } 
-          });
+          if (videoRef.current && videoRef.current.srcObject) {
+            const stream = videoRef.current.srcObject as MediaStream;
+            stream.getTracks().forEach(track => track.stop());
+          }
+          
+          let videoConstraints: any = { width: { ideal: 1280 }, height: { ideal: 720 } };
+          
+          if (activeDeviceId) {
+             videoConstraints.deviceId = { exact: activeDeviceId };
+          } else {
+             // Try to force environment camera if requested
+             if (facingMode === 'environment') {
+               videoConstraints.facingMode = { ideal: 'environment' };
+             } else {
+               videoConstraints.facingMode = 'user';
+             }
+          }
+          
+          const stream = await navigator.mediaDevices.getUserMedia({ video: videoConstraints });
+          
+          if (!isMounted) {
+            stream.getTracks().forEach(track => track.stop());
+            return;
+          }
+          
+          // Once permission is granted, enumerate devices to allow physical switching
+          if (devices.length === 0) {
+            const allDevices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = allDevices.filter(d => d.kind === 'videoinput');
+            if (isMounted) setDevices(videoDevices);
+            
+            // Set the active device to the one we just got
+            const currentTrack = stream.getVideoTracks()[0];
+            if (currentTrack && isMounted) {
+              const activeDev = videoDevices.find(d => d.label === currentTrack.label);
+              if (activeDev) setActiveDeviceId(activeDev.deviceId);
+            }
+          }
+          
+          currentStream = stream;
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
             videoRef.current.play();
           }
-        } catch (err) {
-          console.error("Error accessing camera", err);
-          setError("Failed to access camera. Please check permissions.");
+          if (isMounted) setError(null);
+        } catch (err: any) {
+          if (isMounted) {
+            console.error("Error accessing camera", err);
+            if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+              setError("No camera found on this device. Please connect a webcam.");
+            } else if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+              setError("Camera access denied. Please grant permissions in your browser.");
+            } else {
+              setError("Failed to access camera: " + err.message);
+            }
+          }
         }
       } else {
-        setError("Camera API not supported in this browser.");
+        if (isMounted) setError("Camera API not supported in this browser.");
       }
     };
     
     startCamera();
     
     return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
-        stream.getTracks().forEach(track => track.stop());
+      isMounted = false;
+      if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
       }
-      cancelAnimationFrame(requestRef.current);
-      clearTimeout(segmentRef.current);
     };
-  }, []);
+  }, [facingMode, activeDeviceId]);
 
   // Main Render Loop
   useEffect(() => {
@@ -135,7 +201,7 @@ export default function AsciiCameraApp() {
 
     const renderFrame = async () => {
       if (video.readyState === video.HAVE_ENOUGH_DATA) {
-        if (loading) setLoading(false);
+        setLoading(prev => { if (prev) return false; return prev; });
         
         const vw = video.videoWidth;
         const vh = video.videoHeight;
@@ -160,9 +226,13 @@ export default function AsciiCameraApp() {
         const xOffset = (cw - drawWidth) / 2;
         const yOffset = (ch - drawHeight) / 2;
         
+        const isUserFacing = isUserFacingRef.current;
+        
         displayCtx.save();
-        displayCtx.translate(cw, 0);
-        displayCtx.scale(-1, 1);
+        if (isUserFacing) {
+          displayCtx.translate(cw, 0);
+          displayCtx.scale(-1, 1);
+        }
         displayCtx.drawImage(video, xOffset, yOffset, drawWidth, drawHeight);
         displayCtx.restore();
 
@@ -180,8 +250,10 @@ export default function AsciiCameraApp() {
           
           if (hiddenCtx) {
             hiddenCtx.save();
-            hiddenCtx.translate(sampleWidth, 0);
-            hiddenCtx.scale(-1, 1);
+            if (isUserFacing) {
+              hiddenCtx.translate(sampleWidth, 0);
+              hiddenCtx.scale(-1, 1);
+            }
             
             const sDrawW = sampleWidth * (drawWidth / cw);
             const sDrawH = sampleHeight * (drawHeight / ch);
@@ -205,7 +277,13 @@ export default function AsciiCameraApp() {
                 
                 const displayX = col * asciiSize;
                 const displayY = row * asciiSize;
-                const videoX = Math.floor(((cw - xOffset - displayX) / drawWidth) * vw);
+                
+                let videoX;
+                if (isUserFacing) {
+                  videoX = Math.floor(((cw - xOffset - displayX) / drawWidth) * vw);
+                } else {
+                  videoX = Math.floor(((displayX - xOffset) / drawWidth) * vw);
+                }
                 const videoY = Math.floor(((displayY - yOffset) / drawHeight) * vh);
                 
                 if (videoX >= 0 && videoX < vw && videoY >= 0 && videoY < vh) {
@@ -302,12 +380,27 @@ export default function AsciiCameraApp() {
       segmentRef.current = window.setTimeout(runSegmentation, 100);
     };
 
-    video.addEventListener('loadeddata', () => {
+    const handleLoadedData = () => {
+      cancelAnimationFrame(requestRef.current);
+      clearTimeout(segmentRef.current);
       renderFrame();
       runSegmentation();
-    });
+    };
 
-  }, [model, loading]);
+    video.addEventListener('loadeddata', handleLoadedData);
+    
+    // If video is already loaded before listener is attached
+    if (video.readyState >= 2) {
+      handleLoadedData();
+    }
+
+    return () => {
+      video.removeEventListener('loadeddata', handleLoadedData);
+      cancelAnimationFrame(requestRef.current);
+      clearTimeout(segmentRef.current);
+    };
+
+  }, [model]);
 
   const handleCapture = () => {
     if (displayCanvasRef.current) {
@@ -322,6 +415,17 @@ export default function AsciiCameraApp() {
       a.href = capturedImage;
       a.download = `ascii-capture-${Date.now()}.jpg`;
       a.click();
+    }
+  };
+
+  const handleSwitchCamera = () => {
+    if (devices.length > 1) {
+      const currentIndex = devices.findIndex(d => d.deviceId === activeDeviceId);
+      const nextIndex = (currentIndex + 1) % devices.length;
+      setActiveDeviceId(devices[nextIndex].deviceId);
+    } else {
+      // Fallback to facingMode if enumeration didn't yield multiple cameras
+      setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
     }
   };
 
@@ -350,6 +454,20 @@ export default function AsciiCameraApp() {
             <p className="text-white/70 text-xs tracking-widest uppercase font-medium">
               {!model ? "Initializing AI..." : "Starting Camera..."}
             </p>
+          </div>
+        )}
+
+        {/* Top Floating Controls */}
+        {!capturedImage && (
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-40 flex items-center gap-2">
+            <button 
+              onClick={handleSwitchCamera}
+              className="w-10 h-10 rounded-full bg-zinc-900/60 backdrop-blur-xl border border-white/10 shadow-lg flex items-center justify-center hover:bg-zinc-800/80 transition-colors active:scale-95"
+            >
+              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+            </button>
           </div>
         )}
         
